@@ -1,0 +1,35 @@
+#/bin/bash
+
+HOSTNAME=`hostnamectl | grep hostname | awk '{printf "%s\n", $3}'`
+TIMEZONE=`timedatectl | grep "Time zone" | awk '{printf "%s ", $3}' && date +"%Z %z"`
+USER=`whoami`
+OS=`(cat /etc/issue && uname -r) | awk '{printf "%s %s", $1, $2}'`
+DATE=`date +"%d %b %Y %T"`
+UPTIME=`uptime -p`
+UPTIME_SEC=`cat /proc/uptime | awk '{print $2}'`
+IP=`ip r | grep default | awk '/default/ {print $9}'`
+NET_INTERFACE=`ip r | grep default | awk '/default/ {print $5}'`
+MASK=`ifconfig $NET_INTERFACE | grep netmask | awk '{print $4}'`
+GATEWAY=`ip r | grep default | awk '/default/ {print $3}'`
+RAM_TOTAL=`free -m | awk '/Mem:/{printf "%.3f GB", $2/1024}'`
+RAM_USED=`free -m | awk '/Mem:/{printf "%.3f GB", $3/1024}'`
+RAM_FREE=`free -m | awk '/Mem:/{printf "%.3f GB", $4/1024}'`
+SPACE_ROOT=`df -k /root/ | awk '/dev/{printf "%.2f MB", $2/1024}'`
+SPACE_ROOT_USED=`df -k /root/ | awk '/dev/{printf "%.2f MB", $3/1024}'`
+SPACE_ROOT_FREE=`df -k /root/ | awk '/dev/{printf "%.2f MB", $4/1024}'`
+echo "**HOSTNAME**        = $HOSTNAME"
+echo "**TIMEZONE**        = $TIMEZONE" 
+echo "**USER**            = $USER"
+echo "**OS**              = $OS"
+echo "**DATE**            = $DATE"
+echo "**UPTIME**          = $UPTIME"
+echo "**UPTIME_SEC**      = $UPTIME_SEC"
+echo "**IP**              = $IP"
+echo "**MASK**            = $MASK"
+echo "**GATEWAY**         = $GATEWAY"
+echo "**RAM_TOTAL**       = $RAM_TOTAL"
+echo "**RAM_USED**        = $RAM_USED"
+echo "**RAM_FREE**        = $RAM_FREE"
+echo "**SPACE_ROOT**      = $SPACE_ROOT"
+echo "**SPACE_ROOT_USED** = $SPACE_ROOT_USED"
+echo "**SPACE_ROOT_FREE** = $SPACE_ROOT_FREE"
